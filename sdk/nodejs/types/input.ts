@@ -4574,8 +4574,9 @@ export namespace appstream {
 
 export namespace appsync {
     export interface DataSourceDynamodbConfig {
+        deltaSyncConfig?: pulumi.Input<inputs.appsync.DataSourceDynamodbConfigDeltaSyncConfig>;
         /**
-         * AWS region of Elasticsearch domain. Defaults to current region.
+         * AWS Region for RDS HTTP endpoint. Defaults to current region.
          */
         region?: pulumi.Input<string>;
         /**
@@ -4586,6 +4587,13 @@ export namespace appsync {
          * Set to `true` to use Amazon Cognito credentials with this data source.
          */
         useCallerCredentials?: pulumi.Input<boolean>;
+        versioned?: pulumi.Input<boolean>;
+    }
+
+    export interface DataSourceDynamodbConfigDeltaSyncConfig {
+        baseTableTtl?: pulumi.Input<number>;
+        deltaSyncTableName: pulumi.Input<string>;
+        deltaSyncTableTtl?: pulumi.Input<number>;
     }
 
     export interface DataSourceElasticsearchConfig {
@@ -4594,16 +4602,42 @@ export namespace appsync {
          */
         endpoint: pulumi.Input<string>;
         /**
-         * AWS region of Elasticsearch domain. Defaults to current region.
+         * AWS Region for RDS HTTP endpoint. Defaults to current region.
          */
         region?: pulumi.Input<string>;
     }
 
     export interface DataSourceHttpConfig {
         /**
+         * The authorization configuration in case the HTTP endpoint requires authorization. See Authorization Config.
+         */
+        authorizationConfig?: pulumi.Input<inputs.appsync.DataSourceHttpConfigAuthorizationConfig>;
+        /**
          * HTTP URL.
          */
         endpoint: pulumi.Input<string>;
+    }
+
+    export interface DataSourceHttpConfigAuthorizationConfig {
+        /**
+         * The authorization type that the HTTP endpoint requires. Default values is `AWS_IAM`.
+         */
+        authorizationType?: pulumi.Input<string>;
+        /**
+         * The Identity and Access Management (IAM) settings. See AWS IAM Config.
+         */
+        awsIamConfig?: pulumi.Input<inputs.appsync.DataSourceHttpConfigAuthorizationConfigAwsIamConfig>;
+    }
+
+    export interface DataSourceHttpConfigAuthorizationConfigAwsIamConfig {
+        /**
+         * The signing Amazon Web Services Region for IAM authorization.
+         */
+        signingRegion?: pulumi.Input<string>;
+        /**
+         * The signing service name for IAM authorization.
+         */
+        signingServiceName?: pulumi.Input<string>;
     }
 
     export interface DataSourceLambdaConfig {
@@ -4611,6 +4645,62 @@ export namespace appsync {
          * The ARN for the Lambda function.
          */
         functionArn: pulumi.Input<string>;
+    }
+
+    export interface DataSourceRelationalDatabaseConfig {
+        /**
+         * The Amazon RDS HTTP endpoint configuration. See HTTP Endpoint Config.
+         */
+        httpEndpointConfig?: pulumi.Input<inputs.appsync.DataSourceRelationalDatabaseConfigHttpEndpointConfig>;
+        /**
+         * Source type for the relational database. Valid values: `RDS_HTTP_ENDPOINT`.
+         */
+        sourceType?: pulumi.Input<string>;
+    }
+
+    export interface DataSourceRelationalDatabaseConfigHttpEndpointConfig {
+        /**
+         * AWS secret store ARN for database credentials.
+         */
+        awsSecretStoreArn: pulumi.Input<string>;
+        /**
+         * Logical database name.
+         */
+        databaseName?: pulumi.Input<string>;
+        /**
+         * Amazon RDS cluster identifier.
+         */
+        dbClusterIdentifier: pulumi.Input<string>;
+        /**
+         * AWS Region for RDS HTTP endpoint. Defaults to current region.
+         */
+        region?: pulumi.Input<string>;
+        /**
+         * Logical schema name.
+         */
+        schema?: pulumi.Input<string>;
+    }
+
+    export interface FunctionSyncConfig {
+        /**
+         * The Conflict Detection strategy to use. Valid values are `NONE` and `VERSION`.
+         */
+        conflictDetection?: pulumi.Input<string>;
+        /**
+         * The Conflict Resolution strategy to perform in the event of a conflict. Valid values are `NONE`, `OPTIMISTIC_CONCURRENCY`, `AUTOMERGE`, and `LAMBDA`.
+         */
+        conflictHandler?: pulumi.Input<string>;
+        /**
+         * The Lambda Conflict Handler Config when configuring `LAMBDA` as the Conflict Handler. See Lambda Conflict Handler Config.
+         */
+        lambdaConflictHandlerConfig?: pulumi.Input<inputs.appsync.FunctionSyncConfigLambdaConflictHandlerConfig>;
+    }
+
+    export interface FunctionSyncConfigLambdaConflictHandlerConfig {
+        /**
+         * The Amazon Resource Name (ARN) for the Lambda function to use as the Conflict Handler.
+         */
+        lambdaConflictHandlerArn?: pulumi.Input<string>;
     }
 
     export interface GraphQLApiAdditionalAuthenticationProvider {
@@ -4765,6 +4855,28 @@ export namespace appsync {
          * The list of Function ID.
          */
         functions?: pulumi.Input<pulumi.Input<string>[]>;
+    }
+
+    export interface ResolverSyncConfig {
+        /**
+         * The Conflict Detection strategy to use. Valid values are `NONE` and `VERSION`.
+         */
+        conflictDetection?: pulumi.Input<string>;
+        /**
+         * The Conflict Resolution strategy to perform in the event of a conflict. Valid values are `NONE`, `OPTIMISTIC_CONCURRENCY`, `AUTOMERGE`, and `LAMBDA`.
+         */
+        conflictHandler?: pulumi.Input<string>;
+        /**
+         * The Lambda Conflict Handler Config when configuring `LAMBDA` as the Conflict Handler. See Lambda Conflict Handler Config.
+         */
+        lambdaConflictHandlerConfig?: pulumi.Input<inputs.appsync.ResolverSyncConfigLambdaConflictHandlerConfig>;
+    }
+
+    export interface ResolverSyncConfigLambdaConflictHandlerConfig {
+        /**
+         * The Amazon Resource Name (ARN) for the Lambda function to use as the Conflict Handler.
+         */
+        lambdaConflictHandlerArn?: pulumi.Input<string>;
     }
 }
 
@@ -5501,6 +5613,57 @@ export namespace backup {
          * Specifies the number of days after creation that a recovery point is deleted. Must be 90 days greater than `coldStorageAfter`.
          */
         deleteAfter?: pulumi.Input<number>;
+    }
+
+    export interface SelectionCondition {
+        stringEquals?: pulumi.Input<pulumi.Input<inputs.backup.SelectionConditionStringEqual>[]>;
+        stringLikes?: pulumi.Input<pulumi.Input<inputs.backup.SelectionConditionStringLike>[]>;
+        stringNotEquals?: pulumi.Input<pulumi.Input<inputs.backup.SelectionConditionStringNotEqual>[]>;
+        stringNotLikes?: pulumi.Input<pulumi.Input<inputs.backup.SelectionConditionStringNotLike>[]>;
+    }
+
+    export interface SelectionConditionStringEqual {
+        /**
+         * The key in a key-value pair.
+         */
+        key: pulumi.Input<string>;
+        /**
+         * The value in a key-value pair.
+         */
+        value: pulumi.Input<string>;
+    }
+
+    export interface SelectionConditionStringLike {
+        /**
+         * The key in a key-value pair.
+         */
+        key: pulumi.Input<string>;
+        /**
+         * The value in a key-value pair.
+         */
+        value: pulumi.Input<string>;
+    }
+
+    export interface SelectionConditionStringNotEqual {
+        /**
+         * The key in a key-value pair.
+         */
+        key: pulumi.Input<string>;
+        /**
+         * The value in a key-value pair.
+         */
+        value: pulumi.Input<string>;
+    }
+
+    export interface SelectionConditionStringNotLike {
+        /**
+         * The key in a key-value pair.
+         */
+        key: pulumi.Input<string>;
+        /**
+         * The value in a key-value pair.
+         */
+        value: pulumi.Input<string>;
     }
 
     export interface SelectionSelectionTag {
@@ -6943,6 +7106,9 @@ export namespace cloudfront {
          * A number that CloudFront uses as the value for the `max-age` directive in the `Strict-Transport-Security` HTTP response header.
          */
         accessControlMaxAgeSec?: pulumi.Input<number>;
+        /**
+         * A Boolean value that determines how CloudFront behaves for the HTTP response header.
+         */
         originOverride: pulumi.Input<boolean>;
     }
 
@@ -7096,6 +7262,73 @@ export namespace cloudhsmv2 {
         manufacturerHardwareCertificate?: pulumi.Input<string>;
     }
 
+}
+
+export namespace cloudsearch {
+    export interface DomainEndpointOptions {
+        /**
+         * Enables or disables the requirement that all requests to the domain arrive over HTTPS.
+         */
+        enforceHttps?: pulumi.Input<boolean>;
+        /**
+         * The minimum required TLS version. See the [AWS documentation](https://docs.aws.amazon.com/cloudsearch/latest/developerguide/API_DomainEndpointOptions.html) for valid values.
+         */
+        tlsSecurityPolicy?: pulumi.Input<string>;
+    }
+
+    export interface DomainIndexField {
+        /**
+         * The analysis scheme you want to use for a `text` field. The analysis scheme specifies the language-specific text processing options that are used during indexing.
+         */
+        analysisScheme?: pulumi.Input<string>;
+        /**
+         * The default value for the field. This value is used when no value is specified for the field in the document data.
+         */
+        defaultValue?: pulumi.Input<string>;
+        /**
+         * You can get facet information by enabling this.
+         */
+        facet?: pulumi.Input<boolean>;
+        /**
+         * You can highlight information.
+         */
+        highlight?: pulumi.Input<boolean>;
+        /**
+         * A unique name for the field. Field names must begin with a letter and be at least 3 and no more than 64 characters long. The allowed characters are: `a`-`z` (lower-case letters), `0`-`9`, and `_` (underscore). The name `score` is reserved and cannot be used as a field name.
+         */
+        name: pulumi.Input<string>;
+        /**
+         * You can enable returning the value of all searchable fields.
+         */
+        return?: pulumi.Input<boolean>;
+        /**
+         * You can set whether this index should be searchable or not.
+         */
+        search?: pulumi.Input<boolean>;
+        /**
+         * You can enable the property to be sortable.
+         */
+        sort?: pulumi.Input<boolean>;
+        /**
+         * The field type. Valid values: `date`, `date-array`, `double`, `double-array`, `int`, `int-array`, `literal`, `literal-array`, `text`, `text-array`.
+         */
+        type: pulumi.Input<string>;
+    }
+
+    export interface DomainScalingParameters {
+        /**
+         * The instance type that you want to preconfigure for your domain. See the [AWS documentation](https://docs.aws.amazon.com/cloudsearch/latest/developerguide/API_ScalingParameters.html) for valid values.
+         */
+        desiredInstanceType?: pulumi.Input<string>;
+        /**
+         * The number of partitions you want to preconfigure for your domain. Only valid when you select `search.2xlarge` as the instance type.
+         */
+        desiredPartitionCount?: pulumi.Input<number>;
+        /**
+         * The number of replicas you want to preconfigure for each index partition.
+         */
+        desiredReplicationCount?: pulumi.Input<number>;
+    }
 }
 
 export namespace cloudtrail {
@@ -9068,17 +9301,6 @@ export namespace connect {
         name: pulumi.Input<string>;
     }
 
-    export interface GetBotAssociationLexBotArgs {
-        /**
-         * The Region that the Amazon Lex (V1) bot was created in.
-         */
-        lexRegion?: pulumi.Input<string>;
-        /**
-         * The name of the Amazon Lex (V1) bot.
-         */
-        name: pulumi.Input<string>;
-    }
-
     export interface GetBotAssociationLexBot {
         /**
          * The Region that the Amazon Lex (V1) bot was created in.
@@ -9088,6 +9310,17 @@ export namespace connect {
          * The name of the Amazon Lex (V1) bot.
          */
         name: string;
+    }
+
+    export interface GetBotAssociationLexBotArgs {
+        /**
+         * The Region that the Amazon Lex (V1) bot was created in.
+         */
+        lexRegion?: pulumi.Input<string>;
+        /**
+         * The name of the Amazon Lex (V1) bot.
+         */
+        name: pulumi.Input<string>;
     }
 
     export interface HoursOfOperationConfig {
@@ -9126,6 +9359,55 @@ export namespace connect {
          */
         minutes: pulumi.Input<number>;
     }
+
+    export interface QuickConnectQuickConnectConfig {
+        /**
+         * Specifies the phone configuration of the Quick Connect. This is required only if `quickConnectType` is `PHONE_NUMBER`. The `phoneConfig` block is documented below.
+         */
+        phoneConfigs?: pulumi.Input<pulumi.Input<inputs.connect.QuickConnectQuickConnectConfigPhoneConfig>[]>;
+        /**
+         * Specifies the queue configuration of the Quick Connect. This is required only if `quickConnectType` is `QUEUE`. The `queueConfig` block is documented below.
+         */
+        queueConfigs?: pulumi.Input<pulumi.Input<inputs.connect.QuickConnectQuickConnectConfigQueueConfig>[]>;
+        /**
+         * Specifies the configuration type of the quick connect. valid values are `PHONE_NUMBER`, `QUEUE`, `USER`.
+         */
+        quickConnectType: pulumi.Input<string>;
+        /**
+         * Specifies the user configuration of the Quick Connect. This is required only if `quickConnectType` is `USER`. The `userConfig` block is documented below.
+         */
+        userConfigs?: pulumi.Input<pulumi.Input<inputs.connect.QuickConnectQuickConnectConfigUserConfig>[]>;
+    }
+
+    export interface QuickConnectQuickConnectConfigPhoneConfig {
+        /**
+         * Specifies the phone number in in E.164 format.
+         */
+        phoneNumber: pulumi.Input<string>;
+    }
+
+    export interface QuickConnectQuickConnectConfigQueueConfig {
+        /**
+         * Specifies the identifier of the contact flow.
+         */
+        contactFlowId: pulumi.Input<string>;
+        /**
+         * Specifies the identifier for the queue.
+         */
+        queueId: pulumi.Input<string>;
+    }
+
+    export interface QuickConnectQuickConnectConfigUserConfig {
+        /**
+         * Specifies the identifier of the contact flow.
+         */
+        contactFlowId: pulumi.Input<string>;
+        /**
+         * Specifies the identifier for the user.
+         */
+        userId: pulumi.Input<string>;
+    }
+
 }
 
 export namespace datasync {
@@ -11627,6 +11909,10 @@ export namespace ec2 {
          * Whether or not the metadata service requires session tokens, also referred to as _Instance Metadata Service Version 2 (IMDSv2)_. Valid values include `optional` or `required`. Defaults to `optional`.
          */
         httpTokens?: pulumi.Input<string>;
+        /**
+         * Enables or disables access to instance tags from the instance metadata service. Valid values include `enabled` or `disabled`. Defaults to `disabled`.
+         */
+        instanceMetadataTags?: pulumi.Input<string>;
     }
 
     export interface InstanceNetworkInterface {
@@ -11923,6 +12209,10 @@ export namespace ec2 {
          * Whether or not the metadata service requires session tokens, also referred to as _Instance Metadata Service Version 2 (IMDSv2)_. Can be `"optional"` or `"required"`. (Default: `"optional"`).
          */
         httpTokens?: pulumi.Input<string>;
+        /**
+         * Enables or disables access to instance tags from the instance metadata service. (Default: `disabled`).
+         */
+        instanceMetadataTags?: pulumi.Input<string>;
     }
 
     export interface LaunchTemplateMonitoring {
@@ -12573,6 +12863,10 @@ export namespace ec2 {
          * Whether or not the metadata service requires session tokens, also referred to as _Instance Metadata Service Version 2 (IMDSv2)_. Valid values include `optional` or `required`. Defaults to `optional`.
          */
         httpTokens?: pulumi.Input<string>;
+        /**
+         * Enables or disables access to instance tags from the instance metadata service. Valid values include `enabled` or `disabled`. Defaults to `disabled`.
+         */
+        instanceMetadataTags?: pulumi.Input<string>;
     }
 
     export interface SpotInstanceRequestNetworkInterface {
@@ -12777,16 +13071,44 @@ export namespace ec2 {
     }
 
     export interface VpnConnectionRoute {
+        /**
+         * The CIDR block associated with the local subnet of the customer data center.
+         */
         destinationCidrBlock?: pulumi.Input<string>;
+        /**
+         * Indicates how the routes were provided.
+         */
         source?: pulumi.Input<string>;
+        /**
+         * The current state of the static route.
+         */
         state?: pulumi.Input<string>;
     }
 
     export interface VpnConnectionVgwTelemetry {
+        /**
+         * The number of accepted routes.
+         */
         acceptedRouteCount?: pulumi.Input<number>;
+        /**
+         * The Amazon Resource Name (ARN) of the VPN tunnel endpoint certificate.
+         */
+        certificateArn?: pulumi.Input<string>;
+        /**
+         * The date and time of the last change in status.
+         */
         lastStatusChange?: pulumi.Input<string>;
+        /**
+         * The Internet-routable IP address of the virtual private gateway's outside interface.
+         */
         outsideIpAddress?: pulumi.Input<string>;
+        /**
+         * The status of the VPN tunnel.
+         */
         status?: pulumi.Input<string>;
+        /**
+         * If an error occurs, a description of the error.
+         */
         statusMessage?: pulumi.Input<string>;
     }
 }
@@ -13656,6 +13978,10 @@ export namespace eks {
     }
 
     export interface ClusterKubernetesNetworkConfig {
+        /**
+         * The IP family used to assign Kubernetes pod and service addresses. Valid values are `ipv4` (default) and `ipv6`. You can only specify an IP family when you create a cluster, changing this value will force a new cluster to be created.
+         */
+        ipFamily?: pulumi.Input<string>;
         /**
          * The CIDR block to assign Kubernetes service IP addresses from. If you don't specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks. We recommend that you specify a block that does not overlap with resources in other networks that are peered or connected to your VPC. You can only specify a custom CIDR block when you create a cluster, changing this value will force a new cluster to be created. The block must meet the following requirements:
          */
@@ -15831,6 +16157,31 @@ export namespace fms {
 }
 
 export namespace fsx {
+    export interface DataRepositoryAssociationS3 {
+        /**
+         * Specifies the type of updated objects that will be automatically exported from your file system to the linked S3 bucket. See the `events` configuration block.
+         */
+        autoExportPolicy?: pulumi.Input<inputs.fsx.DataRepositoryAssociationS3AutoExportPolicy>;
+        /**
+         * Specifies the type of updated objects that will be automatically imported from the linked S3 bucket to your file system. See the `events` configuration block.
+         */
+        autoImportPolicy?: pulumi.Input<inputs.fsx.DataRepositoryAssociationS3AutoImportPolicy>;
+    }
+
+    export interface DataRepositoryAssociationS3AutoExportPolicy {
+        /**
+         * A list of file event types to automatically export to your linked S3 bucket or import from the linked S3 bucket. Valid values are `NEW`, `CHANGED`, `DELETED`. Max of 3.
+         */
+        events?: pulumi.Input<pulumi.Input<string>[]>;
+    }
+
+    export interface DataRepositoryAssociationS3AutoImportPolicy {
+        /**
+         * A list of file event types to automatically export to your linked S3 bucket or import from the linked S3 bucket. Valid values are `NEW`, `CHANGED`, `DELETED`. Max of 3.
+         */
+        events?: pulumi.Input<pulumi.Input<string>[]>;
+    }
+
     export interface OntapFileSystemDiskIopsConfiguration {
         /**
          * - The total number of SSD IOPS provisioned for the file system.
@@ -16594,6 +16945,21 @@ export namespace glue {
         tables: pulumi.Input<pulumi.Input<string>[]>;
     }
 
+    export interface CrawlerDeltaTarget {
+        /**
+         * The name of the connection to use to connect to the Delta table target.
+         */
+        connectionName: pulumi.Input<string>;
+        /**
+         * A list of the Amazon S3 paths to the Delta tables.
+         */
+        deltaTables: pulumi.Input<pulumi.Input<string>[]>;
+        /**
+         * Specifies whether to write the manifest files to the Delta table path.
+         */
+        writeManifest: pulumi.Input<boolean>;
+    }
+
     export interface CrawlerDynamodbTarget {
         /**
          * The path of the Amazon DocumentDB or MongoDB target (database/collection).
@@ -16611,7 +16977,7 @@ export namespace glue {
 
     export interface CrawlerJdbcTarget {
         /**
-         * The name of the connection to use to connect to the Amazon DocumentDB or MongoDB target.
+         * The name of the connection to use to connect to the Delta table target.
          */
         connectionName: pulumi.Input<string>;
         /**
@@ -16633,7 +16999,7 @@ export namespace glue {
 
     export interface CrawlerMongodbTarget {
         /**
-         * The name of the connection to use to connect to the Amazon DocumentDB or MongoDB target.
+         * The name of the connection to use to connect to the Delta table target.
          */
         connectionName: pulumi.Input<string>;
         /**
@@ -16655,7 +17021,7 @@ export namespace glue {
 
     export interface CrawlerS3Target {
         /**
-         * The name of the connection to use to connect to the Amazon DocumentDB or MongoDB target.
+         * The name of the connection to use to connect to the Delta table target.
          */
         connectionName?: pulumi.Input<string>;
         /**
@@ -16792,21 +17158,6 @@ export namespace glue {
         nodeType: pulumi.Input<string>;
     }
 
-    export interface GetScriptDagNodeArg {
-        /**
-         * The name of the argument or property.
-         */
-        name: string;
-        /**
-         * Boolean if the value is used as a parameter. Defaults to `false`.
-         */
-        param?: boolean;
-        /**
-         * The value of the argument or property.
-         */
-        value: string;
-    }
-
     export interface GetScriptDagNodeArgArgs {
         /**
          * The name of the argument or property.
@@ -16820,6 +17171,21 @@ export namespace glue {
          * The value of the argument or property.
          */
         value: pulumi.Input<string>;
+    }
+
+    export interface GetScriptDagNodeArg {
+        /**
+         * The name of the argument or property.
+         */
+        name: string;
+        /**
+         * Boolean if the value is used as a parameter. Defaults to `false`.
+         */
+        param?: boolean;
+        /**
+         * The value of the argument or property.
+         */
+        value: string;
     }
 
     export interface JobCommand {
@@ -17150,7 +17516,6 @@ export namespace glue {
          */
         uri: pulumi.Input<string>;
     }
-
 }
 
 export namespace guardduty {
@@ -21826,6 +22191,61 @@ export namespace memorydb {
         value: pulumi.Input<string>;
     }
 
+    export interface SnapshotClusterConfiguration {
+        /**
+         * Description for the cluster.
+         */
+        description?: pulumi.Input<string>;
+        /**
+         * Version number of the Redis engine used by the cluster.
+         */
+        engineVersion?: pulumi.Input<string>;
+        /**
+         * The weekly time range during which maintenance on the cluster is performed.
+         */
+        maintenanceWindow?: pulumi.Input<string>;
+        /**
+         * Name of the cluster.
+         */
+        name?: pulumi.Input<string>;
+        /**
+         * Compute and memory capacity of the nodes in the cluster.
+         */
+        nodeType?: pulumi.Input<string>;
+        /**
+         * Number of shards in the cluster.
+         */
+        numShards?: pulumi.Input<number>;
+        /**
+         * Name of the parameter group associated with the cluster.
+         */
+        parameterGroupName?: pulumi.Input<string>;
+        /**
+         * Port number on which the cluster accepts connections.
+         */
+        port?: pulumi.Input<number>;
+        /**
+         * Number of days for which MemoryDB retains automatic snapshots before deleting them.
+         */
+        snapshotRetentionLimit?: pulumi.Input<number>;
+        /**
+         * The daily time range (in UTC) during which MemoryDB begins taking a daily snapshot of the shard.
+         */
+        snapshotWindow?: pulumi.Input<string>;
+        /**
+         * Name of the subnet group used by the cluster.
+         */
+        subnetGroupName?: pulumi.Input<string>;
+        /**
+         * ARN of the SNS topic to which cluster notifications are sent.
+         */
+        topicArn?: pulumi.Input<string>;
+        /**
+         * The VPC in which the cluster exists.
+         */
+        vpcId?: pulumi.Input<string>;
+    }
+
     export interface UserAuthenticationMode {
         /**
          * The number of passwords belonging to the user.
@@ -22818,6 +23238,61 @@ export namespace opsworks {
         privateKey: pulumi.Input<string>;
     }
 
+    export interface CustomLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        /**
+         * A block the specifies how an opsworks logs look like. See Log Streams.
+         */
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.CustomLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface CustomLayerCloudwatchConfigurationLogStream {
+        /**
+         * Specifies the max number of log events in a batch, up to `10000`. The default value is `1000`.
+         */
+        batchCount?: pulumi.Input<number>;
+        /**
+         * Specifies the maximum size of log events in a batch, in bytes, up to `1048576` bytes. The default value is `32768` bytes.
+         */
+        batchSize?: pulumi.Input<number>;
+        /**
+         * Specifies the time duration for the batching of log events. The minimum value is `5000` and default value is `5000`.
+         */
+        bufferDuration?: pulumi.Input<number>;
+        /**
+         * Specifies how the timestamp is extracted from logs. For more information, see the CloudWatch Logs Agent Reference (https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html).
+         */
+        datetimeFormat?: pulumi.Input<string>;
+        /**
+         * Specifies the encoding of the log file so that the file can be read correctly. The default is `utf8`.
+         */
+        encoding?: pulumi.Input<string>;
+        /**
+         * Specifies log files that you want to push to CloudWatch Logs. File can point to a specific file or multiple files (by using wild card characters such as /var/log/system.log*).
+         */
+        file: pulumi.Input<string>;
+        /**
+         * Specifies the range of lines for identifying a file. The valid values are one number, or two dash-delimited numbers, such as `1`, `2-5`. The default value is `1`.
+         */
+        fileFingerprintLines?: pulumi.Input<string>;
+        /**
+         * Specifies where to start to read data (`startOfFile` or `endOfFile`). The default is `startOfFile`.
+         */
+        initialPosition?: pulumi.Input<string>;
+        /**
+         * Specifies the destination log group. A log group is created automatically if it doesn't already exist.
+         */
+        logGroupName: pulumi.Input<string>;
+        /**
+         * Specifies the pattern for identifying the start of a log message.
+         */
+        multilineStartPattern?: pulumi.Input<string>;
+        /**
+         * Specifies the time zone of log event time stamps.
+         */
+        timeZone?: pulumi.Input<string>;
+    }
+
     export interface CustomLayerEbsVolume {
         /**
          * Encrypt the volume.
@@ -22849,6 +23324,25 @@ export namespace opsworks {
         type?: pulumi.Input<string>;
     }
 
+    export interface GangliaLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.GangliaLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface GangliaLayerCloudwatchConfigurationLogStream {
+        batchCount?: pulumi.Input<number>;
+        batchSize?: pulumi.Input<number>;
+        bufferDuration?: pulumi.Input<number>;
+        datetimeFormat?: pulumi.Input<string>;
+        encoding?: pulumi.Input<string>;
+        file: pulumi.Input<string>;
+        fileFingerprintLines?: pulumi.Input<string>;
+        initialPosition?: pulumi.Input<string>;
+        logGroupName: pulumi.Input<string>;
+        multilineStartPattern?: pulumi.Input<string>;
+        timeZone?: pulumi.Input<string>;
+    }
+
     export interface GangliaLayerEbsVolume {
         encrypted?: pulumi.Input<boolean>;
         /**
@@ -22875,6 +23369,25 @@ export namespace opsworks {
          * The type of volume to create. This may be `standard` (the default), `io1` or `gp2`.
          */
         type?: pulumi.Input<string>;
+    }
+
+    export interface HaproxyLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.HaproxyLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface HaproxyLayerCloudwatchConfigurationLogStream {
+        batchCount?: pulumi.Input<number>;
+        batchSize?: pulumi.Input<number>;
+        bufferDuration?: pulumi.Input<number>;
+        datetimeFormat?: pulumi.Input<string>;
+        encoding?: pulumi.Input<string>;
+        file: pulumi.Input<string>;
+        fileFingerprintLines?: pulumi.Input<string>;
+        initialPosition?: pulumi.Input<string>;
+        logGroupName: pulumi.Input<string>;
+        multilineStartPattern?: pulumi.Input<string>;
+        timeZone?: pulumi.Input<string>;
     }
 
     export interface HaproxyLayerEbsVolume {
@@ -22926,6 +23439,25 @@ export namespace opsworks {
         volumeType?: pulumi.Input<string>;
     }
 
+    export interface JavaAppLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.JavaAppLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface JavaAppLayerCloudwatchConfigurationLogStream {
+        batchCount?: pulumi.Input<number>;
+        batchSize?: pulumi.Input<number>;
+        bufferDuration?: pulumi.Input<number>;
+        datetimeFormat?: pulumi.Input<string>;
+        encoding?: pulumi.Input<string>;
+        file: pulumi.Input<string>;
+        fileFingerprintLines?: pulumi.Input<string>;
+        initialPosition?: pulumi.Input<string>;
+        logGroupName: pulumi.Input<string>;
+        multilineStartPattern?: pulumi.Input<string>;
+        timeZone?: pulumi.Input<string>;
+    }
+
     export interface JavaAppLayerEbsVolume {
         encrypted?: pulumi.Input<boolean>;
         /**
@@ -22952,6 +23484,25 @@ export namespace opsworks {
          * The type of volume to create. This may be `standard` (the default), `io1` or `gp2`.
          */
         type?: pulumi.Input<string>;
+    }
+
+    export interface MemcachedLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.MemcachedLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface MemcachedLayerCloudwatchConfigurationLogStream {
+        batchCount?: pulumi.Input<number>;
+        batchSize?: pulumi.Input<number>;
+        bufferDuration?: pulumi.Input<number>;
+        datetimeFormat?: pulumi.Input<string>;
+        encoding?: pulumi.Input<string>;
+        file: pulumi.Input<string>;
+        fileFingerprintLines?: pulumi.Input<string>;
+        initialPosition?: pulumi.Input<string>;
+        logGroupName: pulumi.Input<string>;
+        multilineStartPattern?: pulumi.Input<string>;
+        timeZone?: pulumi.Input<string>;
     }
 
     export interface MemcachedLayerEbsVolume {
@@ -22982,6 +23533,25 @@ export namespace opsworks {
         type?: pulumi.Input<string>;
     }
 
+    export interface MysqlLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.MysqlLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface MysqlLayerCloudwatchConfigurationLogStream {
+        batchCount?: pulumi.Input<number>;
+        batchSize?: pulumi.Input<number>;
+        bufferDuration?: pulumi.Input<number>;
+        datetimeFormat?: pulumi.Input<string>;
+        encoding?: pulumi.Input<string>;
+        file: pulumi.Input<string>;
+        fileFingerprintLines?: pulumi.Input<string>;
+        initialPosition?: pulumi.Input<string>;
+        logGroupName: pulumi.Input<string>;
+        multilineStartPattern?: pulumi.Input<string>;
+        timeZone?: pulumi.Input<string>;
+    }
+
     export interface MysqlLayerEbsVolume {
         encrypted?: pulumi.Input<boolean>;
         /**
@@ -23008,6 +23578,25 @@ export namespace opsworks {
          * The type of volume to create. This may be `standard` (the default), `io1` or `gp2`.
          */
         type?: pulumi.Input<string>;
+    }
+
+    export interface NodejsAppLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.NodejsAppLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface NodejsAppLayerCloudwatchConfigurationLogStream {
+        batchCount?: pulumi.Input<number>;
+        batchSize?: pulumi.Input<number>;
+        bufferDuration?: pulumi.Input<number>;
+        datetimeFormat?: pulumi.Input<string>;
+        encoding?: pulumi.Input<string>;
+        file: pulumi.Input<string>;
+        fileFingerprintLines?: pulumi.Input<string>;
+        initialPosition?: pulumi.Input<string>;
+        logGroupName: pulumi.Input<string>;
+        multilineStartPattern?: pulumi.Input<string>;
+        timeZone?: pulumi.Input<string>;
     }
 
     export interface NodejsAppLayerEbsVolume {
@@ -23038,6 +23627,25 @@ export namespace opsworks {
         type?: pulumi.Input<string>;
     }
 
+    export interface PhpAppLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.PhpAppLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface PhpAppLayerCloudwatchConfigurationLogStream {
+        batchCount?: pulumi.Input<number>;
+        batchSize?: pulumi.Input<number>;
+        bufferDuration?: pulumi.Input<number>;
+        datetimeFormat?: pulumi.Input<string>;
+        encoding?: pulumi.Input<string>;
+        file: pulumi.Input<string>;
+        fileFingerprintLines?: pulumi.Input<string>;
+        initialPosition?: pulumi.Input<string>;
+        logGroupName: pulumi.Input<string>;
+        multilineStartPattern?: pulumi.Input<string>;
+        timeZone?: pulumi.Input<string>;
+    }
+
     export interface PhpAppLayerEbsVolume {
         encrypted?: pulumi.Input<boolean>;
         /**
@@ -23064,6 +23672,25 @@ export namespace opsworks {
          * The type of volume to create. This may be `standard` (the default), `io1` or `gp2`.
          */
         type?: pulumi.Input<string>;
+    }
+
+    export interface RailsAppLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.RailsAppLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface RailsAppLayerCloudwatchConfigurationLogStream {
+        batchCount?: pulumi.Input<number>;
+        batchSize?: pulumi.Input<number>;
+        bufferDuration?: pulumi.Input<number>;
+        datetimeFormat?: pulumi.Input<string>;
+        encoding?: pulumi.Input<string>;
+        file: pulumi.Input<string>;
+        fileFingerprintLines?: pulumi.Input<string>;
+        initialPosition?: pulumi.Input<string>;
+        logGroupName: pulumi.Input<string>;
+        multilineStartPattern?: pulumi.Input<string>;
+        timeZone?: pulumi.Input<string>;
     }
 
     export interface RailsAppLayerEbsVolume {
@@ -23121,6 +23748,25 @@ export namespace opsworks {
         username?: pulumi.Input<string>;
     }
 
+    export interface StaticWebLayerCloudwatchConfiguration {
+        enabled?: pulumi.Input<boolean>;
+        logStreams?: pulumi.Input<pulumi.Input<inputs.opsworks.StaticWebLayerCloudwatchConfigurationLogStream>[]>;
+    }
+
+    export interface StaticWebLayerCloudwatchConfigurationLogStream {
+        batchCount?: pulumi.Input<number>;
+        batchSize?: pulumi.Input<number>;
+        bufferDuration?: pulumi.Input<number>;
+        datetimeFormat?: pulumi.Input<string>;
+        encoding?: pulumi.Input<string>;
+        file: pulumi.Input<string>;
+        fileFingerprintLines?: pulumi.Input<string>;
+        initialPosition?: pulumi.Input<string>;
+        logGroupName: pulumi.Input<string>;
+        multilineStartPattern?: pulumi.Input<string>;
+        timeZone?: pulumi.Input<string>;
+    }
+
     export interface StaticWebLayerEbsVolume {
         encrypted?: pulumi.Input<boolean>;
         /**
@@ -23148,6 +23794,7 @@ export namespace opsworks {
          */
         type?: pulumi.Input<string>;
     }
+
 }
 
 export namespace organizations {

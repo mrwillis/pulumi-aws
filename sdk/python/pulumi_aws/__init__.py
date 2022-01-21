@@ -86,6 +86,8 @@ if typing.TYPE_CHECKING:
     cloudfront = __cloudfront
     import pulumi_aws.cloudhsmv2 as __cloudhsmv2
     cloudhsmv2 = __cloudhsmv2
+    import pulumi_aws.cloudsearch as __cloudsearch
+    cloudsearch = __cloudsearch
     import pulumi_aws.cloudtrail as __cloudtrail
     cloudtrail = __cloudtrail
     import pulumi_aws.cloudwatch as __cloudwatch
@@ -356,6 +358,7 @@ else:
     cloudformation = _utilities.lazy_import('pulumi_aws.cloudformation')
     cloudfront = _utilities.lazy_import('pulumi_aws.cloudfront')
     cloudhsmv2 = _utilities.lazy_import('pulumi_aws.cloudhsmv2')
+    cloudsearch = _utilities.lazy_import('pulumi_aws.cloudsearch')
     cloudtrail = _utilities.lazy_import('pulumi_aws.cloudtrail')
     cloudwatch = _utilities.lazy_import('pulumi_aws.cloudwatch')
     codeartifact = _utilities.lazy_import('pulumi_aws.codeartifact')
@@ -1202,6 +1205,14 @@ _utilities.register(
  },
  {
   "pkg": "aws",
+  "mod": "appsync/apiCache",
+  "fqn": "pulumi_aws.appsync",
+  "classes": {
+   "aws:appsync/apiCache:ApiCache": "ApiCache"
+  }
+ },
+ {
+  "pkg": "aws",
   "mod": "appsync/apiKey",
   "fqn": "pulumi_aws.appsync",
   "classes": {
@@ -1214,6 +1225,22 @@ _utilities.register(
   "fqn": "pulumi_aws.appsync",
   "classes": {
    "aws:appsync/dataSource:DataSource": "DataSource"
+  }
+ },
+ {
+  "pkg": "aws",
+  "mod": "appsync/domainName",
+  "fqn": "pulumi_aws.appsync",
+  "classes": {
+   "aws:appsync/domainName:DomainName": "DomainName"
+  }
+ },
+ {
+  "pkg": "aws",
+  "mod": "appsync/domainNameApiAssociation",
+  "fqn": "pulumi_aws.appsync",
+  "classes": {
+   "aws:appsync/domainNameApiAssociation:DomainNameApiAssociation": "DomainNameApiAssociation"
   }
  },
  {
@@ -1754,6 +1781,22 @@ _utilities.register(
  },
  {
   "pkg": "aws",
+  "mod": "cloudsearch/domain",
+  "fqn": "pulumi_aws.cloudsearch",
+  "classes": {
+   "aws:cloudsearch/domain:Domain": "Domain"
+  }
+ },
+ {
+  "pkg": "aws",
+  "mod": "cloudsearch/domainServiceAccessPolicy",
+  "fqn": "pulumi_aws.cloudsearch",
+  "classes": {
+   "aws:cloudsearch/domainServiceAccessPolicy:DomainServiceAccessPolicy": "DomainServiceAccessPolicy"
+  }
+ },
+ {
+  "pkg": "aws",
   "mod": "cloudtrail/trail",
   "fqn": "pulumi_aws.cloudtrail",
   "classes": {
@@ -2098,6 +2141,14 @@ _utilities.register(
  },
  {
   "pkg": "aws",
+  "mod": "cognito/identityPoolProviderPrincipalTag",
+  "fqn": "pulumi_aws.cognito",
+  "classes": {
+   "aws:cognito/identityPoolProviderPrincipalTag:IdentityPoolProviderPrincipalTag": "IdentityPoolProviderPrincipalTag"
+  }
+ },
+ {
+  "pkg": "aws",
   "mod": "cognito/identityPoolRoleAttachment",
   "fqn": "pulumi_aws.cognito",
   "classes": {
@@ -2178,6 +2229,14 @@ _utilities.register(
  },
  {
   "pkg": "aws",
+  "mod": "connect/contactFlowModule",
+  "fqn": "pulumi_aws.connect",
+  "classes": {
+   "aws:connect/contactFlowModule:ContactFlowModule": "ContactFlowModule"
+  }
+ },
+ {
+  "pkg": "aws",
   "mod": "connect/hoursOfOperation",
   "fqn": "pulumi_aws.connect",
   "classes": {
@@ -2198,6 +2257,14 @@ _utilities.register(
   "fqn": "pulumi_aws.connect",
   "classes": {
    "aws:connect/lambdaFunctionAssociation:LambdaFunctionAssociation": "LambdaFunctionAssociation"
+  }
+ },
+ {
+  "pkg": "aws",
+  "mod": "connect/quickConnect",
+  "fqn": "pulumi_aws.connect",
+  "classes": {
+   "aws:connect/quickConnect:QuickConnect": "QuickConnect"
   }
  },
  {
@@ -2322,10 +2389,34 @@ _utilities.register(
  },
  {
   "pkg": "aws",
+  "mod": "detective/invitationAccepter",
+  "fqn": "pulumi_aws.detective",
+  "classes": {
+   "aws:detective/invitationAccepter:InvitationAccepter": "InvitationAccepter"
+  }
+ },
+ {
+  "pkg": "aws",
+  "mod": "detective/member",
+  "fqn": "pulumi_aws.detective",
+  "classes": {
+   "aws:detective/member:Member": "Member"
+  }
+ },
+ {
+  "pkg": "aws",
   "mod": "devicefarm/devicePool",
   "fqn": "pulumi_aws.devicefarm",
   "classes": {
    "aws:devicefarm/devicePool:DevicePool": "DevicePool"
+  }
+ },
+ {
+  "pkg": "aws",
+  "mod": "devicefarm/instanceProfile",
+  "fqn": "pulumi_aws.devicefarm",
+  "classes": {
+   "aws:devicefarm/instanceProfile:InstanceProfile": "InstanceProfile"
   }
  },
  {
@@ -4082,6 +4173,14 @@ _utilities.register(
  },
  {
   "pkg": "aws",
+  "mod": "fsx/dataRepositoryAssociation",
+  "fqn": "pulumi_aws.fsx",
+  "classes": {
+   "aws:fsx/dataRepositoryAssociation:DataRepositoryAssociation": "DataRepositoryAssociation"
+  }
+ },
+ {
+  "pkg": "aws",
   "mod": "fsx/lustreFileSystem",
   "fqn": "pulumi_aws.fsx",
   "classes": {
@@ -4954,6 +5053,14 @@ _utilities.register(
  },
  {
   "pkg": "aws",
+  "mod": "lambda/invocation",
+  "fqn": "pulumi_aws.lambda_",
+  "classes": {
+   "aws:lambda/invocation:Invocation": "Invocation"
+  }
+ },
+ {
+  "pkg": "aws",
   "mod": "lambda/layerVersion",
   "fqn": "pulumi_aws.lambda_",
   "classes": {
@@ -5254,6 +5361,14 @@ _utilities.register(
   "fqn": "pulumi_aws.memorydb",
   "classes": {
    "aws:memorydb/parameterGroup:ParameterGroup": "ParameterGroup"
+  }
+ },
+ {
+  "pkg": "aws",
+  "mod": "memorydb/snapshot",
+  "fqn": "pulumi_aws.memorydb",
+  "classes": {
+   "aws:memorydb/snapshot:Snapshot": "Snapshot"
   }
  },
  {
@@ -7046,6 +7161,14 @@ _utilities.register(
   "fqn": "pulumi_aws.shield",
   "classes": {
    "aws:shield/protectionGroup:ProtectionGroup": "ProtectionGroup"
+  }
+ },
+ {
+  "pkg": "aws",
+  "mod": "shield/protectionHealthCheckAssociation",
+  "fqn": "pulumi_aws.shield",
+  "classes": {
+   "aws:shield/protectionHealthCheckAssociation:ProtectionHealthCheckAssociation": "ProtectionHealthCheckAssociation"
   }
  },
  {

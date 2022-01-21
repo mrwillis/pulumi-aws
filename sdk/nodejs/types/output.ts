@@ -4494,8 +4494,9 @@ export namespace appstream {
 
 export namespace appsync {
     export interface DataSourceDynamodbConfig {
+        deltaSyncConfig?: outputs.appsync.DataSourceDynamodbConfigDeltaSyncConfig;
         /**
-         * AWS region of Elasticsearch domain. Defaults to current region.
+         * AWS Region for RDS HTTP endpoint. Defaults to current region.
          */
         region: string;
         /**
@@ -4506,6 +4507,13 @@ export namespace appsync {
          * Set to `true` to use Amazon Cognito credentials with this data source.
          */
         useCallerCredentials?: boolean;
+        versioned?: boolean;
+    }
+
+    export interface DataSourceDynamodbConfigDeltaSyncConfig {
+        baseTableTtl?: number;
+        deltaSyncTableName: string;
+        deltaSyncTableTtl?: number;
     }
 
     export interface DataSourceElasticsearchConfig {
@@ -4514,16 +4522,42 @@ export namespace appsync {
          */
         endpoint: string;
         /**
-         * AWS region of Elasticsearch domain. Defaults to current region.
+         * AWS Region for RDS HTTP endpoint. Defaults to current region.
          */
         region: string;
     }
 
     export interface DataSourceHttpConfig {
         /**
+         * The authorization configuration in case the HTTP endpoint requires authorization. See Authorization Config.
+         */
+        authorizationConfig?: outputs.appsync.DataSourceHttpConfigAuthorizationConfig;
+        /**
          * HTTP URL.
          */
         endpoint: string;
+    }
+
+    export interface DataSourceHttpConfigAuthorizationConfig {
+        /**
+         * The authorization type that the HTTP endpoint requires. Default values is `AWS_IAM`.
+         */
+        authorizationType?: string;
+        /**
+         * The Identity and Access Management (IAM) settings. See AWS IAM Config.
+         */
+        awsIamConfig?: outputs.appsync.DataSourceHttpConfigAuthorizationConfigAwsIamConfig;
+    }
+
+    export interface DataSourceHttpConfigAuthorizationConfigAwsIamConfig {
+        /**
+         * The signing Amazon Web Services Region for IAM authorization.
+         */
+        signingRegion?: string;
+        /**
+         * The signing service name for IAM authorization.
+         */
+        signingServiceName?: string;
     }
 
     export interface DataSourceLambdaConfig {
@@ -4531,6 +4565,62 @@ export namespace appsync {
          * The ARN for the Lambda function.
          */
         functionArn: string;
+    }
+
+    export interface DataSourceRelationalDatabaseConfig {
+        /**
+         * The Amazon RDS HTTP endpoint configuration. See HTTP Endpoint Config.
+         */
+        httpEndpointConfig?: outputs.appsync.DataSourceRelationalDatabaseConfigHttpEndpointConfig;
+        /**
+         * Source type for the relational database. Valid values: `RDS_HTTP_ENDPOINT`.
+         */
+        sourceType?: string;
+    }
+
+    export interface DataSourceRelationalDatabaseConfigHttpEndpointConfig {
+        /**
+         * AWS secret store ARN for database credentials.
+         */
+        awsSecretStoreArn: string;
+        /**
+         * Logical database name.
+         */
+        databaseName?: string;
+        /**
+         * Amazon RDS cluster identifier.
+         */
+        dbClusterIdentifier: string;
+        /**
+         * AWS Region for RDS HTTP endpoint. Defaults to current region.
+         */
+        region: string;
+        /**
+         * Logical schema name.
+         */
+        schema?: string;
+    }
+
+    export interface FunctionSyncConfig {
+        /**
+         * The Conflict Detection strategy to use. Valid values are `NONE` and `VERSION`.
+         */
+        conflictDetection?: string;
+        /**
+         * The Conflict Resolution strategy to perform in the event of a conflict. Valid values are `NONE`, `OPTIMISTIC_CONCURRENCY`, `AUTOMERGE`, and `LAMBDA`.
+         */
+        conflictHandler?: string;
+        /**
+         * The Lambda Conflict Handler Config when configuring `LAMBDA` as the Conflict Handler. See Lambda Conflict Handler Config.
+         */
+        lambdaConflictHandlerConfig?: outputs.appsync.FunctionSyncConfigLambdaConflictHandlerConfig;
+    }
+
+    export interface FunctionSyncConfigLambdaConflictHandlerConfig {
+        /**
+         * The Amazon Resource Name (ARN) for the Lambda function to use as the Conflict Handler.
+         */
+        lambdaConflictHandlerArn?: string;
     }
 
     export interface GraphQLApiAdditionalAuthenticationProvider {
@@ -4685,6 +4775,28 @@ export namespace appsync {
          * The list of Function ID.
          */
         functions?: string[];
+    }
+
+    export interface ResolverSyncConfig {
+        /**
+         * The Conflict Detection strategy to use. Valid values are `NONE` and `VERSION`.
+         */
+        conflictDetection?: string;
+        /**
+         * The Conflict Resolution strategy to perform in the event of a conflict. Valid values are `NONE`, `OPTIMISTIC_CONCURRENCY`, `AUTOMERGE`, and `LAMBDA`.
+         */
+        conflictHandler?: string;
+        /**
+         * The Lambda Conflict Handler Config when configuring `LAMBDA` as the Conflict Handler. See Lambda Conflict Handler Config.
+         */
+        lambdaConflictHandlerConfig?: outputs.appsync.ResolverSyncConfigLambdaConflictHandlerConfig;
+    }
+
+    export interface ResolverSyncConfigLambdaConflictHandlerConfig {
+        /**
+         * The Amazon Resource Name (ARN) for the Lambda function to use as the Conflict Handler.
+         */
+        lambdaConflictHandlerArn?: string;
     }
 
 }
@@ -5426,6 +5538,57 @@ export namespace backup {
          * Specifies the number of days after creation that a recovery point is deleted. Must be 90 days greater than `coldStorageAfter`.
          */
         deleteAfter?: number;
+    }
+
+    export interface SelectionCondition {
+        stringEquals?: outputs.backup.SelectionConditionStringEqual[];
+        stringLikes?: outputs.backup.SelectionConditionStringLike[];
+        stringNotEquals?: outputs.backup.SelectionConditionStringNotEqual[];
+        stringNotLikes?: outputs.backup.SelectionConditionStringNotLike[];
+    }
+
+    export interface SelectionConditionStringEqual {
+        /**
+         * The key in a key-value pair.
+         */
+        key: string;
+        /**
+         * The value in a key-value pair.
+         */
+        value: string;
+    }
+
+    export interface SelectionConditionStringLike {
+        /**
+         * The key in a key-value pair.
+         */
+        key: string;
+        /**
+         * The value in a key-value pair.
+         */
+        value: string;
+    }
+
+    export interface SelectionConditionStringNotEqual {
+        /**
+         * The key in a key-value pair.
+         */
+        key: string;
+        /**
+         * The value in a key-value pair.
+         */
+        value: string;
+    }
+
+    export interface SelectionConditionStringNotLike {
+        /**
+         * The key in a key-value pair.
+         */
+        key: string;
+        /**
+         * The value in a key-value pair.
+         */
+        value: string;
     }
 
     export interface SelectionSelectionTag {
@@ -7185,6 +7348,9 @@ export namespace cloudfront {
          * A number that CloudFront uses as the value for the `max-age` directive in the `Strict-Transport-Security` HTTP response header.
          */
         accessControlMaxAgeSec?: number;
+        /**
+         * A Boolean value that determines how CloudFront behaves for the HTTP response header.
+         */
         originOverride: boolean;
     }
 
@@ -7344,6 +7510,74 @@ export namespace cloudhsmv2 {
         clusterCsr: string;
         hsmCertificate: string;
         manufacturerHardwareCertificate: string;
+    }
+
+}
+
+export namespace cloudsearch {
+    export interface DomainEndpointOptions {
+        /**
+         * Enables or disables the requirement that all requests to the domain arrive over HTTPS.
+         */
+        enforceHttps: boolean;
+        /**
+         * The minimum required TLS version. See the [AWS documentation](https://docs.aws.amazon.com/cloudsearch/latest/developerguide/API_DomainEndpointOptions.html) for valid values.
+         */
+        tlsSecurityPolicy: string;
+    }
+
+    export interface DomainIndexField {
+        /**
+         * The analysis scheme you want to use for a `text` field. The analysis scheme specifies the language-specific text processing options that are used during indexing.
+         */
+        analysisScheme?: string;
+        /**
+         * The default value for the field. This value is used when no value is specified for the field in the document data.
+         */
+        defaultValue?: string;
+        /**
+         * You can get facet information by enabling this.
+         */
+        facet?: boolean;
+        /**
+         * You can highlight information.
+         */
+        highlight?: boolean;
+        /**
+         * A unique name for the field. Field names must begin with a letter and be at least 3 and no more than 64 characters long. The allowed characters are: `a`-`z` (lower-case letters), `0`-`9`, and `_` (underscore). The name `score` is reserved and cannot be used as a field name.
+         */
+        name: string;
+        /**
+         * You can enable returning the value of all searchable fields.
+         */
+        return?: boolean;
+        /**
+         * You can set whether this index should be searchable or not.
+         */
+        search?: boolean;
+        /**
+         * You can enable the property to be sortable.
+         */
+        sort?: boolean;
+        /**
+         * The field type. Valid values: `date`, `date-array`, `double`, `double-array`, `int`, `int-array`, `literal`, `literal-array`, `text`, `text-array`.
+         */
+        type: string;
+    }
+
+    export interface DomainScalingParameters {
+        /**
+         * The instance type that you want to preconfigure for your domain. See the [AWS documentation](https://docs.aws.amazon.com/cloudsearch/latest/developerguide/API_ScalingParameters.html) for valid values.
+         */
+        desiredInstanceType: string;
+        /**
+         * The number of partitions you want to preconfigure for your domain. Only valid when you select `search.2xlarge` as the instance type.
+         */
+        desiredPartitionCount: number;
+        /**
+         * The number of replicas you want to preconfigure for each index partition.
+         */
+        desiredReplicationCount: number;
     }
 
 }
@@ -8915,6 +9149,42 @@ export namespace codestarnotifications {
 }
 
 export namespace cognito {
+    export interface GetUserPoolClientAnalyticsConfiguration {
+        /**
+         * (Optional) Application ARN for an Amazon Pinpoint application. Conflicts with `externalId` and `roleArn`.
+         */
+        applicationArn: string;
+        /**
+         * (Optional) Application ID for an Amazon Pinpoint application.
+         */
+        applicationId: string;
+        /**
+         * (Optional) ID for the Analytics Configuration. Conflicts with `applicationArn`.
+         */
+        externalId: string;
+        /**
+         * (Optional) ARN of an IAM role that authorizes Amazon Cognito to publish events to Amazon Pinpoint analytics. Conflicts with `applicationArn`.
+         * * `userDataShared` (Optional) If set to `true`, Amazon Cognito will include user data in the events it publishes to Amazon Pinpoint analytics.
+         */
+        roleArn: string;
+        userDataShared: boolean;
+    }
+
+    export interface GetUserPoolClientTokenValidityUnit {
+        /**
+         * (Optional) Time unit in for the value in `accessTokenValidity`, defaults to `hours`.
+         */
+        accessToken: string;
+        /**
+         * (Optional) Time unit in for the value in `idTokenValidity`, defaults to `hours`.
+         */
+        idToken: string;
+        /**
+         * (Optional) Time unit in for the value in `refreshTokenValidity`, defaults to `days`.
+         */
+        refreshToken: string;
+    }
+
     export interface IdentityPoolCognitoIdentityProvider {
         /**
          * The client ID for the Amazon Cognito Identity User Pool.
@@ -9737,6 +10007,53 @@ export namespace connect {
         minutes: number;
     }
 
+    export interface QuickConnectQuickConnectConfig {
+        /**
+         * Specifies the phone configuration of the Quick Connect. This is required only if `quickConnectType` is `PHONE_NUMBER`. The `phoneConfig` block is documented below.
+         */
+        phoneConfigs?: outputs.connect.QuickConnectQuickConnectConfigPhoneConfig[];
+        /**
+         * Specifies the queue configuration of the Quick Connect. This is required only if `quickConnectType` is `QUEUE`. The `queueConfig` block is documented below.
+         */
+        queueConfigs?: outputs.connect.QuickConnectQuickConnectConfigQueueConfig[];
+        /**
+         * Specifies the configuration type of the quick connect. valid values are `PHONE_NUMBER`, `QUEUE`, `USER`.
+         */
+        quickConnectType: string;
+        /**
+         * Specifies the user configuration of the Quick Connect. This is required only if `quickConnectType` is `USER`. The `userConfig` block is documented below.
+         */
+        userConfigs?: outputs.connect.QuickConnectQuickConnectConfigUserConfig[];
+    }
+
+    export interface QuickConnectQuickConnectConfigPhoneConfig {
+        /**
+         * Specifies the phone number in in E.164 format.
+         */
+        phoneNumber: string;
+    }
+
+    export interface QuickConnectQuickConnectConfigQueueConfig {
+        /**
+         * Specifies the identifier of the contact flow.
+         */
+        contactFlowId: string;
+        /**
+         * Specifies the identifier for the queue.
+         */
+        queueId: string;
+    }
+
+    export interface QuickConnectQuickConnectConfigUserConfig {
+        /**
+         * Specifies the identifier of the contact flow.
+         */
+        contactFlowId: string;
+        /**
+         * Specifies the identifier for the user.
+         */
+        userId: string;
+    }
 }
 
 export namespace datasync {
@@ -11278,6 +11595,10 @@ export namespace ec2 {
          * If session tokens are required: `optional`, `required`.
          */
         httpTokens: string;
+        /**
+         * If access to instance tags is allowed from the metadata service: `enabled`, `disabled`.
+         */
+        instanceMetadataTags: string;
     }
 
     export interface GetInstanceRootBlockDevice {
@@ -11603,6 +11924,10 @@ export namespace ec2 {
          * If session tokens are required: `optional`, `required`.
          */
         httpTokens: string;
+        /**
+         * If access to instance tags is allowed from the metadata service: `enabled`, `disabled`.
+         */
+        instanceMetadataTags: string;
     }
 
     export interface GetLaunchTemplateMonitoring {
@@ -12296,6 +12621,10 @@ export namespace ec2 {
          * Whether or not the metadata service requires session tokens, also referred to as _Instance Metadata Service Version 2 (IMDSv2)_. Valid values include `optional` or `required`. Defaults to `optional`.
          */
         httpTokens: string;
+        /**
+         * Enables or disables access to instance tags from the instance metadata service. Valid values include `enabled` or `disabled`. Defaults to `disabled`.
+         */
+        instanceMetadataTags?: string;
     }
 
     export interface InstanceNetworkInterface {
@@ -12592,6 +12921,10 @@ export namespace ec2 {
          * Whether or not the metadata service requires session tokens, also referred to as _Instance Metadata Service Version 2 (IMDSv2)_. Can be `"optional"` or `"required"`. (Default: `"optional"`).
          */
         httpTokens: string;
+        /**
+         * Enables or disables access to instance tags from the instance metadata service. (Default: `disabled`).
+         */
+        instanceMetadataTags?: string;
     }
 
     export interface LaunchTemplateMonitoring {
@@ -13242,6 +13575,10 @@ export namespace ec2 {
          * Whether or not the metadata service requires session tokens, also referred to as _Instance Metadata Service Version 2 (IMDSv2)_. Valid values include `optional` or `required`. Defaults to `optional`.
          */
         httpTokens: string;
+        /**
+         * Enables or disables access to instance tags from the instance metadata service. Valid values include `enabled` or `disabled`. Defaults to `disabled`.
+         */
+        instanceMetadataTags?: string;
     }
 
     export interface SpotInstanceRequestNetworkInterface {
@@ -13446,16 +13783,44 @@ export namespace ec2 {
     }
 
     export interface VpnConnectionRoute {
+        /**
+         * The CIDR block associated with the local subnet of the customer data center.
+         */
         destinationCidrBlock: string;
+        /**
+         * Indicates how the routes were provided.
+         */
         source: string;
+        /**
+         * The current state of the static route.
+         */
         state: string;
     }
 
     export interface VpnConnectionVgwTelemetry {
+        /**
+         * The number of accepted routes.
+         */
         acceptedRouteCount: number;
+        /**
+         * The Amazon Resource Name (ARN) of the VPN tunnel endpoint certificate.
+         */
+        certificateArn: string;
+        /**
+         * The date and time of the last change in status.
+         */
         lastStatusChange: string;
+        /**
+         * The Internet-routable IP address of the virtual private gateway's outside interface.
+         */
         outsideIpAddress: string;
+        /**
+         * The status of the VPN tunnel.
+         */
         status: string;
+        /**
+         * If an error occurs, a description of the error.
+         */
         statusMessage: string;
     }
 }
@@ -14331,6 +14696,10 @@ export namespace eks {
 
     export interface ClusterKubernetesNetworkConfig {
         /**
+         * The IP family used to assign Kubernetes pod and service addresses. Valid values are `ipv4` (default) and `ipv6`. You can only specify an IP family when you create a cluster, changing this value will force a new cluster to be created.
+         */
+        ipFamily: string;
+        /**
          * The CIDR block to assign Kubernetes service IP addresses from. If you don't specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks. We recommend that you specify a block that does not overlap with resources in other networks that are peered or connected to your VPC. You can only specify a custom CIDR block when you create a cluster, changing this value will force a new cluster to be created. The block must meet the following requirements:
          */
         serviceIpv4Cidr: string;
@@ -14400,6 +14769,7 @@ export namespace eks {
     }
 
     export interface GetClusterKubernetesNetworkConfig {
+        ipFamily: string;
         /**
          * The CIDR block to assign Kubernetes service IP addresses from.
          */
@@ -16982,6 +17352,31 @@ export namespace fms {
 }
 
 export namespace fsx {
+    export interface DataRepositoryAssociationS3 {
+        /**
+         * Specifies the type of updated objects that will be automatically exported from your file system to the linked S3 bucket. See the `events` configuration block.
+         */
+        autoExportPolicy: outputs.fsx.DataRepositoryAssociationS3AutoExportPolicy;
+        /**
+         * Specifies the type of updated objects that will be automatically imported from the linked S3 bucket to your file system. See the `events` configuration block.
+         */
+        autoImportPolicy: outputs.fsx.DataRepositoryAssociationS3AutoImportPolicy;
+    }
+
+    export interface DataRepositoryAssociationS3AutoExportPolicy {
+        /**
+         * A list of file event types to automatically export to your linked S3 bucket or import from the linked S3 bucket. Valid values are `NEW`, `CHANGED`, `DELETED`. Max of 3.
+         */
+        events: string[];
+    }
+
+    export interface DataRepositoryAssociationS3AutoImportPolicy {
+        /**
+         * A list of file event types to automatically export to your linked S3 bucket or import from the linked S3 bucket. Valid values are `NEW`, `CHANGED`, `DELETED`. Max of 3.
+         */
+        events: string[];
+    }
+
     export interface OntapFileSystemDiskIopsConfiguration {
         /**
          * - The total number of SSD IOPS provisioned for the file system.
@@ -17760,6 +18155,21 @@ export namespace glue {
         tables: string[];
     }
 
+    export interface CrawlerDeltaTarget {
+        /**
+         * The name of the connection to use to connect to the Delta table target.
+         */
+        connectionName: string;
+        /**
+         * A list of the Amazon S3 paths to the Delta tables.
+         */
+        deltaTables: string[];
+        /**
+         * Specifies whether to write the manifest files to the Delta table path.
+         */
+        writeManifest: boolean;
+    }
+
     export interface CrawlerDynamodbTarget {
         /**
          * The path of the Amazon DocumentDB or MongoDB target (database/collection).
@@ -17777,7 +18187,7 @@ export namespace glue {
 
     export interface CrawlerJdbcTarget {
         /**
-         * The name of the connection to use to connect to the Amazon DocumentDB or MongoDB target.
+         * The name of the connection to use to connect to the Delta table target.
          */
         connectionName: string;
         /**
@@ -17799,7 +18209,7 @@ export namespace glue {
 
     export interface CrawlerMongodbTarget {
         /**
-         * The name of the connection to use to connect to the Amazon DocumentDB or MongoDB target.
+         * The name of the connection to use to connect to the Delta table target.
          */
         connectionName: string;
         /**
@@ -17821,7 +18231,7 @@ export namespace glue {
 
     export interface CrawlerS3Target {
         /**
-         * The name of the connection to use to connect to the Amazon DocumentDB or MongoDB target.
+         * The name of the connection to use to connect to the Delta table target.
          */
         connectionName?: string;
         /**
@@ -23194,6 +23604,61 @@ export namespace memorydb {
         value: string;
     }
 
+    export interface SnapshotClusterConfiguration {
+        /**
+         * Description for the cluster.
+         */
+        description: string;
+        /**
+         * Version number of the Redis engine used by the cluster.
+         */
+        engineVersion: string;
+        /**
+         * The weekly time range during which maintenance on the cluster is performed.
+         */
+        maintenanceWindow: string;
+        /**
+         * Name of the cluster.
+         */
+        name: string;
+        /**
+         * Compute and memory capacity of the nodes in the cluster.
+         */
+        nodeType: string;
+        /**
+         * Number of shards in the cluster.
+         */
+        numShards: number;
+        /**
+         * Name of the parameter group associated with the cluster.
+         */
+        parameterGroupName: string;
+        /**
+         * Port number on which the cluster accepts connections.
+         */
+        port: number;
+        /**
+         * Number of days for which MemoryDB retains automatic snapshots before deleting them.
+         */
+        snapshotRetentionLimit: number;
+        /**
+         * The daily time range (in UTC) during which MemoryDB begins taking a daily snapshot of the shard.
+         */
+        snapshotWindow: string;
+        /**
+         * Name of the subnet group used by the cluster.
+         */
+        subnetGroupName: string;
+        /**
+         * ARN of the SNS topic to which cluster notifications are sent.
+         */
+        topicArn: string;
+        /**
+         * The VPC in which the cluster exists.
+         */
+        vpcId: string;
+    }
+
     export interface UserAuthenticationMode {
         /**
          * The number of passwords belonging to the user.
@@ -24265,6 +24730,61 @@ export namespace opsworks {
         privateKey: string;
     }
 
+    export interface CustomLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        /**
+         * A block the specifies how an opsworks logs look like. See Log Streams.
+         */
+        logStreams?: outputs.opsworks.CustomLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface CustomLayerCloudwatchConfigurationLogStream {
+        /**
+         * Specifies the max number of log events in a batch, up to `10000`. The default value is `1000`.
+         */
+        batchCount?: number;
+        /**
+         * Specifies the maximum size of log events in a batch, in bytes, up to `1048576` bytes. The default value is `32768` bytes.
+         */
+        batchSize?: number;
+        /**
+         * Specifies the time duration for the batching of log events. The minimum value is `5000` and default value is `5000`.
+         */
+        bufferDuration?: number;
+        /**
+         * Specifies how the timestamp is extracted from logs. For more information, see the CloudWatch Logs Agent Reference (https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html).
+         */
+        datetimeFormat?: string;
+        /**
+         * Specifies the encoding of the log file so that the file can be read correctly. The default is `utf8`.
+         */
+        encoding?: string;
+        /**
+         * Specifies log files that you want to push to CloudWatch Logs. File can point to a specific file or multiple files (by using wild card characters such as /var/log/system.log*).
+         */
+        file: string;
+        /**
+         * Specifies the range of lines for identifying a file. The valid values are one number, or two dash-delimited numbers, such as `1`, `2-5`. The default value is `1`.
+         */
+        fileFingerprintLines?: string;
+        /**
+         * Specifies where to start to read data (`startOfFile` or `endOfFile`). The default is `startOfFile`.
+         */
+        initialPosition?: string;
+        /**
+         * Specifies the destination log group. A log group is created automatically if it doesn't already exist.
+         */
+        logGroupName: string;
+        /**
+         * Specifies the pattern for identifying the start of a log message.
+         */
+        multilineStartPattern?: string;
+        /**
+         * Specifies the time zone of log event time stamps.
+         */
+        timeZone?: string;
+    }
+
     export interface CustomLayerEbsVolume {
         /**
          * Encrypt the volume.
@@ -24296,6 +24816,25 @@ export namespace opsworks {
         type?: string;
     }
 
+    export interface GangliaLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        logStreams?: outputs.opsworks.GangliaLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface GangliaLayerCloudwatchConfigurationLogStream {
+        batchCount?: number;
+        batchSize?: number;
+        bufferDuration?: number;
+        datetimeFormat?: string;
+        encoding?: string;
+        file: string;
+        fileFingerprintLines?: string;
+        initialPosition?: string;
+        logGroupName: string;
+        multilineStartPattern?: string;
+        timeZone?: string;
+    }
+
     export interface GangliaLayerEbsVolume {
         encrypted?: boolean;
         /**
@@ -24322,6 +24861,25 @@ export namespace opsworks {
          * The type of volume to create. This may be `standard` (the default), `io1` or `gp2`.
          */
         type?: string;
+    }
+
+    export interface HaproxyLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        logStreams?: outputs.opsworks.HaproxyLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface HaproxyLayerCloudwatchConfigurationLogStream {
+        batchCount?: number;
+        batchSize?: number;
+        bufferDuration?: number;
+        datetimeFormat?: string;
+        encoding?: string;
+        file: string;
+        fileFingerprintLines?: string;
+        initialPosition?: string;
+        logGroupName: string;
+        multilineStartPattern?: string;
+        timeZone?: string;
     }
 
     export interface HaproxyLayerEbsVolume {
@@ -24373,6 +24931,25 @@ export namespace opsworks {
         volumeType: string;
     }
 
+    export interface JavaAppLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        logStreams?: outputs.opsworks.JavaAppLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface JavaAppLayerCloudwatchConfigurationLogStream {
+        batchCount?: number;
+        batchSize?: number;
+        bufferDuration?: number;
+        datetimeFormat?: string;
+        encoding?: string;
+        file: string;
+        fileFingerprintLines?: string;
+        initialPosition?: string;
+        logGroupName: string;
+        multilineStartPattern?: string;
+        timeZone?: string;
+    }
+
     export interface JavaAppLayerEbsVolume {
         encrypted?: boolean;
         /**
@@ -24399,6 +24976,25 @@ export namespace opsworks {
          * The type of volume to create. This may be `standard` (the default), `io1` or `gp2`.
          */
         type?: string;
+    }
+
+    export interface MemcachedLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        logStreams?: outputs.opsworks.MemcachedLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface MemcachedLayerCloudwatchConfigurationLogStream {
+        batchCount?: number;
+        batchSize?: number;
+        bufferDuration?: number;
+        datetimeFormat?: string;
+        encoding?: string;
+        file: string;
+        fileFingerprintLines?: string;
+        initialPosition?: string;
+        logGroupName: string;
+        multilineStartPattern?: string;
+        timeZone?: string;
     }
 
     export interface MemcachedLayerEbsVolume {
@@ -24429,6 +25025,25 @@ export namespace opsworks {
         type?: string;
     }
 
+    export interface MysqlLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        logStreams?: outputs.opsworks.MysqlLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface MysqlLayerCloudwatchConfigurationLogStream {
+        batchCount?: number;
+        batchSize?: number;
+        bufferDuration?: number;
+        datetimeFormat?: string;
+        encoding?: string;
+        file: string;
+        fileFingerprintLines?: string;
+        initialPosition?: string;
+        logGroupName: string;
+        multilineStartPattern?: string;
+        timeZone?: string;
+    }
+
     export interface MysqlLayerEbsVolume {
         encrypted?: boolean;
         /**
@@ -24455,6 +25070,25 @@ export namespace opsworks {
          * The type of volume to create. This may be `standard` (the default), `io1` or `gp2`.
          */
         type?: string;
+    }
+
+    export interface NodejsAppLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        logStreams?: outputs.opsworks.NodejsAppLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface NodejsAppLayerCloudwatchConfigurationLogStream {
+        batchCount?: number;
+        batchSize?: number;
+        bufferDuration?: number;
+        datetimeFormat?: string;
+        encoding?: string;
+        file: string;
+        fileFingerprintLines?: string;
+        initialPosition?: string;
+        logGroupName: string;
+        multilineStartPattern?: string;
+        timeZone?: string;
     }
 
     export interface NodejsAppLayerEbsVolume {
@@ -24485,6 +25119,25 @@ export namespace opsworks {
         type?: string;
     }
 
+    export interface PhpAppLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        logStreams?: outputs.opsworks.PhpAppLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface PhpAppLayerCloudwatchConfigurationLogStream {
+        batchCount?: number;
+        batchSize?: number;
+        bufferDuration?: number;
+        datetimeFormat?: string;
+        encoding?: string;
+        file: string;
+        fileFingerprintLines?: string;
+        initialPosition?: string;
+        logGroupName: string;
+        multilineStartPattern?: string;
+        timeZone?: string;
+    }
+
     export interface PhpAppLayerEbsVolume {
         encrypted?: boolean;
         /**
@@ -24511,6 +25164,25 @@ export namespace opsworks {
          * The type of volume to create. This may be `standard` (the default), `io1` or `gp2`.
          */
         type?: string;
+    }
+
+    export interface RailsAppLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        logStreams?: outputs.opsworks.RailsAppLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface RailsAppLayerCloudwatchConfigurationLogStream {
+        batchCount?: number;
+        batchSize?: number;
+        bufferDuration?: number;
+        datetimeFormat?: string;
+        encoding?: string;
+        file: string;
+        fileFingerprintLines?: string;
+        initialPosition?: string;
+        logGroupName: string;
+        multilineStartPattern?: string;
+        timeZone?: string;
     }
 
     export interface RailsAppLayerEbsVolume {
@@ -24566,6 +25238,25 @@ export namespace opsworks {
          * Username to use when authenticating to the source.
          */
         username?: string;
+    }
+
+    export interface StaticWebLayerCloudwatchConfiguration {
+        enabled?: boolean;
+        logStreams?: outputs.opsworks.StaticWebLayerCloudwatchConfigurationLogStream[];
+    }
+
+    export interface StaticWebLayerCloudwatchConfigurationLogStream {
+        batchCount?: number;
+        batchSize?: number;
+        bufferDuration?: number;
+        datetimeFormat?: string;
+        encoding?: string;
+        file: string;
+        fileFingerprintLines?: string;
+        initialPosition?: string;
+        logGroupName: string;
+        multilineStartPattern?: string;
+        timeZone?: string;
     }
 
     export interface StaticWebLayerEbsVolume {
